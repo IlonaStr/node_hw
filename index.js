@@ -6,6 +6,7 @@ const contactsRouter = require('./contacts/routes');
 
 require("dotenv").config();
 const PORT = process.env.PORT;
+
 const contactsServer = async () => {
     const app = express();
     app.use(express.json());
@@ -21,7 +22,7 @@ const contactsServer = async () => {
         }
     }
     app.use(morgan('combined'));
-    app.use(cors({ origin: "http://localhost:3000" }));
+    app.use(cors({ origin: "http://localhost:8080" }));
     app.use("/contacts", contactsRouter);
     app.listen(PORT, 
         err => err ? console.error(err) : console.info ('Server is listening on port' + PORT)

@@ -1,6 +1,4 @@
-const Joi = require('joi');
 const contactModel = require("./model");
-const { Types: { ObjectId }, } = require("mongoose");
 
 const addContact = async (req, res, next) => {
     try {
@@ -20,7 +18,7 @@ const listContacts = async (req, res, next) => {
 };
 
 const getContactById = async (req, res, next) => {
-    try { const contactId = req.params.contactId;
+    try { const { contactId } = req.params;
     const contactById = await contactModel.findById(contactId);
     if (!contactById) {
         return res.status(404).send({ message: "Not found" });
@@ -57,40 +55,6 @@ const updateContact = async (req, res, next) => {
     next(error);
 }
 };
-
-const validateAddContact = (req, res, next) => {
-    const validationRules = Joi.object({
-        name: Joi.string().required(),
-        email: Joi.string().required(),
-        phone: Joi.string().required(),
-    });
-    const validateResult = validationRules.validate(req.body);
-    if(validateResult.error) {
-        return res.status(400).send(validateResult.error);
-    }
-    next();
-}
-
-validateUpdateContact(req, res, next) {
-    const validationRules = Joi.object({
-        name: Joi.string(),
-        email: Joi.string(),
-        phone: Joi.string(),
-    }).min(1);
-    const validateResult = validationRules.validate(req.body);
-    if(validateResult.error) {
-        return res.status(400).send(validateResult.error)
-    }
-    next();
-}
-
-validateId(req, res, next) {
-    const contactId = req.params;
-    if(!ObjectId.isValid(contactId)) {
-        return res.status(400).send()
-    }
-    next()
-}
 
 module.exports = {
     addContact, listContacts, getContactById, deleteContact, updateContact,
